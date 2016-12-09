@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class DevicesActivity extends AppCompatActivity {
     final int REQUEST_ENABLE_BT = 321;
@@ -38,6 +39,20 @@ public class DevicesActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d("BT", "Found!!");
+            Toast.makeText(DevicesActivity.this, "Bluetooth found!", Toast.LENGTH_SHORT).show();
+
+            String action = intent.getAction();
+            //找到設備
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent
+                        .getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    Log.d("BT", "find device:" + device.getName()
+                            + device.getAddress());
+                    Toast.makeText(DevicesActivity.this, "device:" + device.getName()
+                            + device.getAddress(), Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 }
